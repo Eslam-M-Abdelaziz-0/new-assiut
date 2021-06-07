@@ -15,6 +15,7 @@ pillow = "==7.2.0"
 django-debug-toolbar = "==2.2"
 markdown = "==3.2.1"
 django-taggit = "==1.2.0"
+django-import-export = "*"
 
 [requires]
 python_version = "3.8"

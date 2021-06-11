@@ -25,7 +25,11 @@ SECRET_KEY = 'n1_0c)#3!h(nzg1%4z94u2+yz@!fv@&l&v*-rwxk)+dr(v7(mn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ["54.186.194.52","localhost","127.0.0.1"]
+=======
+ALLOWED_HOSTS = ["54.186.194.52","127.0.0.1","localhost"]
+>>>>>>> e0f005fdd71ca07d490da5c864ff6a36cb0c6bd9
 
 SITE_ID = 1
 

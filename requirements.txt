@@ -1,0 +1,8 @@
+python-dotenv
+gunicorn
+psycopg2-binary
+django
+django_extensions
+django-taggit
+django-import-export
+Markdown

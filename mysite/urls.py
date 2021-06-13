@@ -23,7 +23,13 @@ sitemaps = {
 }
 
 urlpatterns = [
+    # Django admin
     path('admin/', admin.site.urls),
+
+    # User management
+    path('accounts/', include('allauth.urls')), # new
+
+    # Local apps
     path('', include('blog.urls', namespace='blog')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap')

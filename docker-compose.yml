@@ -14,6 +14,10 @@ services:
     build: . #build the image for the web service from the dockerfile in parent directory
     command: sh -c "python manage.py makemigrations &&
                     python manage.py migrate &&
+                    python manage.py collectstatic --noinput &&
+                    python manage.py dumpdata > db_old.json &&
+                    pip freeze > r_old.txt &&
+                    python manage.py loaddata db.json &&
                     gunicorn mysite.wsgi:application --bind 0.0.0.0:${APP_PORT}"
     volumes:
       - .:/microservice:rw # map data and files from parent directory in host to microservice directory in docker containe
@@ -43,3 +47,7 @@ services:
 volumes:
   postgres_data:
   static_volume:
+
+#python manage.py initiate_admin &&
+#python manage.py collectstatic &&
+#echo "from django.contrib.auth.models import User; User.objects.create_superuser(${DJANGO_SU_NAME}, ${DJANGO_SU_EMAIL}, ${DJANGO_SU_PASSWORD})" | python manage.py shell &&

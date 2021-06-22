@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   nginx:
@@ -6,48 +6,31 @@ services:
     ports:
       - 1300:80
     volumes:
-      - static_volume:/home/app/microservice/static
+      - .:/code
     depends_on:
       - web
     restart: "on-failure"
   web:
-    build: . #build the image for the web service from the dockerfile in parent directory
+    build: .
+    #command: python /code/manage.py runserver 0.0.0.0:8000
     command: sh -c "python manage.py makemigrations &&
                     python manage.py migrate &&
+                    python manage.py runserver 0.0.0.0:8000 &&
                     python manage.py collectstatic --noinput &&
                     python manage.py dumpdata > db_old.json &&
-                    pip freeze > r_old.txt &&
-                    python manage.py loaddata db.json &&
                     gunicorn mysite.wsgi:application --bind 0.0.0.0:${APP_PORT}"
     volumes:
-      - .:/microservice:rw # map data and files from parent directory in host to microservice directory in docker containe
-      - static_volume:/home/app/microservice/static
-    env_file:
-      - .env
-    image: mysite
-
-    expose:
-      - ${APP_PORT}
-    restart: "on-failure"
+      - .:/code
+    ports:
+      - 8000:8000
     depends_on:
       - db
   db:
-    image: postgres:11-alpine
+    image: postgres:11
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-      - PGPORT=${DB_PORT}
-      - POSTGRES_USER=${POSTGRES_USER}
-    restart: "on-failure"
-
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
 
 volumes:
   postgres_data:
-  static_volume:
-
-#python manage.py initiate_admin &&
-#python manage.py collectstatic &&
-#echo "from django.contrib.auth.models import User; User.objects.create_superuser(${DJANGO_SU_NAME}, ${DJANGO_SU_EMAIL}, ${DJANGO_SU_PASSWORD})" | python manage.py shell &&

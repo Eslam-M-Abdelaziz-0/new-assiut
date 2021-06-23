@@ -6,3 +6,5 @@ django_extensions
 django-taggit
 django-import-export
 Markdown
+django-crispy-forms
+django-allauth
